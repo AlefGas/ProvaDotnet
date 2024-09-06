@@ -9,6 +9,7 @@ using Empresa.Data;
 using Empresa.Models;
 using Empresa.Reapository;
 using Empresa.Reapository.Interface;
+using Empresa.DTO;
 
 namespace Empresa.Controllers
 {
@@ -24,24 +25,11 @@ namespace Empresa.Controllers
         }
 
 
-        [HttpGet("Departamento/{depid}")]
+        [HttpGet("BuscarEmpregadosPorDepId/{depid}")]
         public async Task<ActionResult<List<Empregado>>> GetEmpregadosByDepId(int depid)
         {
-            try
-            {
-                var empregados = await iempregadoRepository.GetEmpregadosByDepIdAsync(depid);
-
-                if (empregados == null)
-                {
-                    return NotFound($"Nenhum empregado encontrado para o departamento com id = {depid}");
-                }
-
-                return Ok(empregados);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao recuperar dados do banco de dados");
-            }
+            var empregados = await iempregadoRepository.GetEmpregadosByDepIdAsync(depid);
+            return Ok(empregados);
         }
 
         [HttpGet]
@@ -94,21 +82,21 @@ namespace Empresa.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateEmpregado([FromBody] Empregado empregado)
+        [HttpPost("CreateEmpregado")]
+        public async Task<ActionResult<Empregado>> CreateEmpregado([FromBody] EmpregadosCreateDTO empregadosCreateDTO)
         {
             try
             {
-                if (empregado == null)
-                    return BadRequest();
+                if (empregadosCreateDTO == null)
+                    return BadRequest("Dados do empregado são inválidos.");
 
-                var result = await iempregadoRepository.AddEmpregado(empregado);
+                var empregado = await iempregadoRepository.AddEmpregado(empregadosCreateDTO);
 
-                return CreatedAtAction(nameof(GetEmpregado), new { id = result.EmpId }, result);
+                return Ok(empregado);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao adicionar dados ao banco de dados");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao criar o empregado: {ex.Message}");
             }
         }
 

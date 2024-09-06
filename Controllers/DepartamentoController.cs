@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Empresa.Data;
 using Empresa.Models;
 using Empresa.Reapository.Interface;
+using Empresa.DTO;
 
 namespace Empresa.Controllers
 {
@@ -76,21 +77,21 @@ namespace Empresa.Controllers
         }
 
         // POST: api/Departamento
-        [HttpPost]
-        public async Task<IActionResult> CreateDepartamento([FromBody] Departamento departamento)
+        [HttpPost("CreateDepartamento")]
+        public async Task<ActionResult<Departamento>> CreateDepartamento([FromBody] DepartamentoCreateDTO departamentoCreateDto)
         {
             try
             {
-                if (departamento == null)
-                    return BadRequest();
+                if (departamentoCreateDto == null)
+                    return BadRequest("Dados do departamento são inválidos.");
 
-                var createdDepartamento = await _departamentoRepository.AddDepartamentoAsync(departamento);
+                var createdDepartamento = await _departamentoRepository.AddDepartamentoAsync(departamentoCreateDto);
 
-                return CreatedAtAction(nameof(GetDepartamento), new { id = createdDepartamento.DepId }, createdDepartamento);
+                return Ok(createdDepartamento);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao adicionar dados ao banco de dados");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao criar o departamento: {ex.Message}");
             }
         }
 

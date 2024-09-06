@@ -8,11 +8,14 @@ namespace Empresa.Models
     {
         [Key]
         public int EmpId { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string Sobrenome { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public string Nome { get; set; } 
+        public string Sobrenome { get; set; } 
+        public string Email { get; set; } 
         public Genero Genero { get; set; }
+        public string? FotoUrl { get; set; }
+        
+        [ForeignKey("DepId")]
+        public Departamento? Departamento { get; set; }
         public int DepId { get; set; }
-        public string FotoUrl { get; set; } = string.Empty ;
     }
 }

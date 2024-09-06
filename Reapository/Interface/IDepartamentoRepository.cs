@@ -1,4 +1,5 @@
-﻿using Empresa.Models;
+﻿using Empresa.DTO;
+using Empresa.Models;
 
 namespace Empresa.Reapository.Interface
 {
@@ -6,7 +7,7 @@ namespace Empresa.Reapository.Interface
     {
         Task<IEnumerable<Departamento>> GetDepartamentosAsync();
         Task<Departamento> GetDepartamentoAsync(int id);
-        Task<Departamento> AddDepartamentoAsync(Departamento departamento);
+        Task<Departamento> AddDepartamentoAsync(DepartamentoCreateDTO departamento);
         Task<Departamento> UpdateDepartamentoAsync(Departamento departamento);
         void DeleteDepartamentoAsync(int id);
     }

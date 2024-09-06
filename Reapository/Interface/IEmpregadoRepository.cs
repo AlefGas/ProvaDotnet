@@ -1,4 +1,5 @@
-﻿using Empresa.Models;
+﻿using Empresa.DTO;
+using Empresa.Models;
 
 namespace Empresa.Reapository.Interface
 {
@@ -6,9 +7,12 @@ namespace Empresa.Reapository.Interface
     {
         Task<IEnumerable<Empregado>> GetEmpregados();
         Task<Empregado> GetEmpregado(int empId);
-        Task<Empregado> AddEmpregado(Empregado empregado);
+        Task<List<Empregado>> AddEmpregado(EmpregadosCreateDTO empregadosCreateDTO);
+       
         Task<Empregado> UpdateEmpregado(Empregado empregado);
         void DeleteEmpregado(int empId);
         Task<List<Empregado>> GetEmpregadosByDepIdAsync(int depid);
+        
+
     }
 }

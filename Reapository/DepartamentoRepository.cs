@@ -1,4 +1,5 @@
 ﻿using Empresa.Data;
+using Empresa.DTO;
 using Empresa.Models;
 using Empresa.Reapository.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +14,29 @@ namespace Empresa.Reapository
         {
             this.dbContext = dbContext;
         }
-        public async Task<Departamento> AddDepartamentoAsync(Departamento departamento)
+
+        public async Task<Departamento> AddDepartamentoAsync(DepartamentoCreateDTO departamento)
         {
-            var result = await dbContext.departamentos.AddAsync(departamento);
-            await dbContext.SaveChangesAsync();
-            return result.Entity;
+            try
+            {
+                var novoDepartamento = new Departamento()
+                {
+                    DepNome = departamento.DepNome
+                };
+
+                dbContext.Add(novoDepartamento);
+                await dbContext.SaveChangesAsync();
+
+                return novoDepartamento;
+            }
+            catch (Exception ex)
+            {
+                // Lançar uma exceção ou lidar com o erro conforme necessário
+                throw new Exception($"Erro ao criar departamento: {ex.Message}");
+            }
         }
+
+
 
         public async void DeleteDepartamentoAsync(int id)
         {
